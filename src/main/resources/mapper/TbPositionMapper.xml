@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.TbPositionMapper">
+
+    <select id="searchJobs" resultType="com.dizhejiang.teachin.model.TbPosition">
+        select
+               position_id id,
+               position_name position,
+               level,
+               pid,
+               sort
+        from  tb_position
+        where position_Name   LIKE CONCAT(CONCAT('%', #{positionName}),'%')
+    </select>
+</mapper>

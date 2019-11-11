@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.DeliverMapper">
+
+    <insert id="save">
+        insert into t_deliver
+                (position_id,user_id,delivery_time,status)
+        values
+               (#{deliver.positionId},#{deliver.userId},#{deliver.deliveryTime},#{deliver.status})
+    </insert>
+    <select id="selectDeliverListByUserId" resultType="com.dizhejiang.teachin.vo.PositionVo">
+        select
+               del.position_id as positionId,
+               del.user_id as userId,
+               del.delivery_time as deliveryTime,
+               del.status as status,
+               pos.position as position,
+               pos.work_type as workType,
+               pos.salary_min as salaryMin,
+               pos.salary_max as salaryMax,
+               pos.part as part,
+               pos.num as num,
+               pos.work_place as workPlace,
+               pos.company_id as companyId,
+               pos.company_name as  companyName,
+               views,
+               deliver_num deliverNum,
+               pos.create_time as createTime
+        from  t_deliver del join t_position pos on del.position_id = pos.id
+        where  del.user_id = #{userId} and del.status='01' and pos.status='01'
+    </select>
+    <select id="selectDeliverListByPositionId" resultType="com.dizhejiang.teachin.model.Deliver">
+        select
+             id
+        from  t_deliver where position_id = #{positionId}
+    </select>
+    <select id="selectModelMax" resultType="com.dizhejiang.teachin.model.Deliver">
+        select
+               id
+        from  t_deliver order by id desc
+    </select>
+
+
+</mapper>

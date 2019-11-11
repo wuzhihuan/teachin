@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.TeacherAttestationMapper">
+
+  <insert id="save">
+      insert  into t_teacher_attestation
+              (school_id,school_name,id_no,job_no,position,status,name,user_id,department)
+      values
+             (#{teacherAttestation.schoolId},#{teacherAttestation.schoolName},
+              #{teacherAttestation.idNo}, #{teacherAttestation.jobNo},
+              #{teacherAttestation.position},  '01',
+               #{teacherAttestation.name} , #{teacherAttestation.userId},#{teacherAttestation.department}  )
+  </insert>
+    <select id="selectMaxModel" resultType="com.dizhejiang.teachin.model.TeacherAttestation">
+        select id FROM t_teacher_attestation order by id desc
+    </select>
+    <select id="selectModelByUserId" resultType="com.dizhejiang.teachin.model.TeacherAttestation">
+        select
+               school_id schoolId,
+               school_name schoolName,
+               id_no idNo,
+              job_no jobNo,
+               position,
+               status,
+               name,
+               user_id userId,
+               department
+        FROM t_teacher_attestation
+        WHERE user_id = #{userId}
+    </select>
+    <update id="update">
+        update  t_teacher_attestation
+        <trim prefix="set" suffixOverrides=",">
+            <if test="teacherAttestation.schoolId!=null">
+                school_id=#{teacherAttestation.schoolId},
+            </if>
+            <if test="teacherAttestation.schoolName!=null and teacherAttestation.schoolName!=''">
+                school_name=#{teacherAttestation.schoolId},
+            </if>
+            <if test="teacherAttestation.idNo!=null and teacherAttestation.idNo!=''">
+                id_no=#{teacherAttestation.idNo},
+            </if>
+            <if test="teacherAttestation.jobNo!=null and teacherAttestation.jobNo!=''">
+                job_no=#{teacherAttestation.jobNo},
+            </if>
+            <if test="teacherAttestation.position!=null and teacherAttestation.position!=''">
+                position=#{teacherAttestation.position},
+            </if>
+            <if test="teacherAttestation.name!=null and teacherAttestation.name!=''">
+                name=#{teacherAttestation.name},
+            </if>
+            <if test="teacherAttestation.userId!=null and teacherAttestation.userId!=''">
+                user_id=#{teacherAttestation.userId},
+            </if>
+            <if test="teacherAttestation.department!=null and teacherAttestation.department!=''">
+                department=#{teacherAttestation.department},
+            </if>
+        </trim>
+    </update>
+
+
+
+</mapper>

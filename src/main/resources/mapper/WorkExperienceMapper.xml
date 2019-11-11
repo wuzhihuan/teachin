@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.WorkExperienceMapper">
+
+    <select id="selectWorkExperienceListByUserId" resultType="com.dizhejiang.teachin.model.WorkExperience">
+        select
+         id,
+         user_id userId,
+         company_id companyId,
+         company_name companyName,
+         company_type companyType,
+         scope,
+         part,
+         position,
+         enter_date enterDate,
+         leave_date leaveDate,
+         salary,
+         duty,
+         voucher_name voucherName,
+         voucher_phone voucherPhone,
+         detail,
+         status
+        from  t_work_experience
+        where user_id = #{userId}
+    </select>
+    <select id="selectWorkExperienceById" resultType="com.dizhejiang.teachin.model.WorkExperience">
+        select
+               id,
+               user_id userId,
+               company_id companyId,
+               company_name companyName,
+               company_type companyType,
+               scope,
+               part,
+               position,
+               enter_date enterDate,
+               leave_date leaveDate,
+               salary,
+               duty,
+               voucher_name voucherName,
+               voucher_phone voucherPhone,
+               detail,
+               status
+        from  t_work_experience
+        where id = #{id}
+    </select>
+
+
+
+    <insert id="save">
+        INSERT INTO  t_work_experience
+                (user_id,company_id,company_name,company_type,scope,part,position,enter_date,leave_date,salary,duty,voucher_name,voucher_phone,
+                 detail,status)
+        VALUES
+               (#{workExperience.userId},#{workExperience.companyId},#{workExperience.companyName},#{workExperience.companyType},#{workExperience.scope},
+                #{workExperience.part},#{workExperience.position},#{workExperience.enterDate},#{workExperience.leaveDate},#{workExperience.salary},
+                #{workExperience.duty},#{workExperience.voucherName},#{workExperience.voucherPhone},#{workExperience.detail},#{workExperience.status})
+    </insert>
+
+    <update id="update">
+        update t_work_experience
+        <trim prefix="set" suffixOverrides=",">
+            <if test="workExperience.companyName!=null and workExperience.companyName!='' ">
+                company_name=#{workExperience.companyName},
+            </if>
+            <if test="workExperience.companyType!=null and workExperience.companyType!='' ">
+                company_type=#{workExperience.companyType},
+            </if>
+            <if test="workExperience.scope!=null and workExperience.scope!='' ">
+                scope=#{workExperience.scope},
+            </if>
+            <if test="workExperience.part!=null and workExperience.part!='' ">
+                part=#{workExperience.part},
+            </if>
+            <if test="workExperience.position!=null and workExperience.position!='' ">
+                position=#{workExperience.position},
+            </if>
+            <if test="workExperience.enterDate!=null and workExperience.enterDate!='' ">
+                enter_date=#{workExperience.enterDate},
+            </if>
+            <if test="workExperience.leaveDate!=null and workExperience.leaveDate!='' ">
+                leave_date=#{workExperience.leaveDate},
+            </if>
+            <if test="workExperience.salary!=null and workExperience.salary!='' ">
+                salary=#{workExperience.salary},
+            </if>
+
+            <if test="workExperience.duty!=null and workExperience.duty!='' ">
+                duty= #{workExperience.duty},
+            </if>
+            <if test="workExperience.voucherName!=null and workExperience.voucherName!='' ">
+                voucher_name=#{workExperience.voucherName},
+            </if>
+            <if test="workExperience.voucherPhone!=null and workExperience.voucherPhone!='' ">
+                voucher_phone=#{workExperience.voucherPhone},
+            </if>
+            <if test="workExperience.detail!=null and workExperience.voucherPhone!='' ">
+                detail = #{workExperience.detail},
+            </if>
+            <if test="workExperience.status!=null and workExperience.status!='' ">
+                status=#{workExperience.status},
+            </if>
+        </trim>
+        where id=#{workExperience.id}
+    </update>
+
+    <delete id="delete">
+        delete from t_work_experience where id=#{id}
+    </delete>
+
+</mapper>

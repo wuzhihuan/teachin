@@ -1,0 +1,77 @@
+server:
+  port: 8089
+  id: 1
+spring:
+  application:
+    name: teachin
+
+  datasource:
+    #url: jdbc:mysql://rm-bp1ngmui494xyp35lfo.mysql.rds.aliyuncs.com:3306/zhidianx?useUnicode=true&amp;characterEncoding=UTF-8
+    url: jdbc:mysql://rm-bp1ngmui494xyp35lfo.mysql.rds.aliyuncs.com:3306/teachin?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    username: zhidian
+    password: Xu4556054
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  redis:
+    database: 0
+    timeout: 10000ms
+    # Redis服务器地址127.0.0.1
+    host: 101.37.245.98
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: wujisuan888
+    # 连接池最大连接数（使用负值表示没有限制）
+    pool:
+    max-active: 8
+    # 连接池最大阻塞等待时间（使用负值表示没有限制）
+    max-wait: -1
+    # 连接池中的最大空闲连接
+    max-idle: 8
+    # 连接池中的最小空闲连接
+    min-idle: 0
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.dizhejiang.teachin
+  mapper-locations: classpath*:mapper/*.xml
+
+#pagehelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: count=countSql
+
+demo:
+  rocketmq:
+    orderTopic: order-paid-topic
+    msgExtTopic:  message-ext-topic
+    transTopic: spring-transaction-topic
+
+#qiniu:
+#  picUrl: /opt/file
+#  accessKey: smUpnZOaPDp16iFMR8vdx_5x6aZglTJplsDEHbSk
+#  secretKey: Vma17N30YdpuUWt8bsfeGSntjrW2Kv1JZlmc5Y55
+#  domain: pwmsz3f0n.bkt.clouddn.com
+#domain https://pic.qufen.top
+#accessKey: enchuqUr0dVnB_QzjnONINpEkqcaAfJJ_uiaAp0h
+# secretKey: _Xx683DsD4fKQB3bt4HVYPDVHvInkugaC9gEX0ua
+  #AK : smUpnZOaPDp16iFMR8vdx_5x6aZglTJplsDEHbSk
+  #SK : Vma17N30YdpuUWt8bsfeGSntjrW2Kv1JZlmc5Y55  http://img.dizhejiang.cn
+qiniu:
+  picUrl: /opt/file
+  accessKey: smUpnZOaPDp16iFMR8vdx_5x6aZglTJplsDEHbSk
+  secretKey: Vma17N30YdpuUWt8bsfeGSntjrW2Kv1JZlmc5Y55
+  domain: https://img.dizhejiang.cn
+
+aliyun:
+  smsAppkey : LTAIhKrBqJonDoLh
+  smsSecret : k8iwLcUmrOnpH55XwXJ10n6EmIaug4
+  smsLoginTemplateCode: SMS_174029468
+  smsRegisterTemplateCode: SMS_163470169
+  smsForgetpasdwoedTemplateCode: SMS_163470168
+  smsReganloginTemplateCode: SMS_163470167
+  smsCommonTemplateCode : SMS_173477309
+
+

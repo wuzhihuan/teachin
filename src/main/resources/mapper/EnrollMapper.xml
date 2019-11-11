@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.EnrollMapper">
+
+    <update id="update">
+        update  t_enroll  set status=#{status},create_time=#{createTime} where teachin_id = #{teachId} and user_id=#{userId}
+    </update>
+
+    <insert id="save">
+        insert into t_enroll (teachin_id,user_id,status,create_time) values(#{teachId},#{userId},#{status},#{createTime})
+    </insert>
+    <select id="selectModelMax" resultType="com.dizhejiang.teachin.model.Enroll">
+        select  id from t_enroll order by id desc
+    </select>
+
+    <select id="selectEnrollByTeachIdAndUserId" resultType="com.dizhejiang.teachin.model.Enroll">
+        select
+               id,
+               teachin_id teachinId,
+                user_id userId,
+               status
+        from  t_enroll
+        where teachin_id=#{teachId} and user_id=#{userId}
+    </select>
+    <select id="selectEnrollListByUserId" resultType="com.dizhejiang.teachin.model.Enroll">
+        select
+               id,
+               teachin_id teachinId,
+               user_id userId,
+               create_time createTime,
+               status
+        from  t_enroll where user_id = #{userId}
+    </select>
+
+    <select id="selectEnrollByUserId" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+               tea.id id,
+               tea.title  title,
+               tea.place place,
+               tea.op_User_Id opUserId,
+               tea.school_name schoolName,
+               tea.happen_time happenTime,
+               sh.logo schoolUrl,
+               tea.status status
+        from  t_enroll enr join t_teachin tea on enr.teachin_id = tea.id
+        join  t_teachin  tt on  tt.id = tea.id
+        join   t_school sh on  sh.id=tea.school_id
+        where  enr.user_id=#{userId} and tea.status ='03'  and enr.status!='02'
+          <if test="happenTime!=null and happenTime!=''">
+              and tt.happen_time   LIKE CONCAT(CONCAT('%', #{happenTime}),'%')
+          </if>
+        order by enr.create_time desc
+    </select>
+    <select id="selectEnrollByUserIdAndTime" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+        tea.id id,
+        tea.title  title,
+        tea.place place,
+        tea.op_user_id opUserId,
+        tea.school_name schoolName,
+        tea.happen_time happenTime,
+        sh.logo schoolUrl,
+        tea.status status
+        from  t_enroll enr join t_teachin tea on enr.teachin_id = tea.id
+        join  t_teachin  tt on  tt.id = tea.id
+        join   t_school sh on  sh.id=tea.school_id
+        where  enr.user_id=#{dto.userId} and tea.status ='03'  and enr.status!='02'
+        and tt.happen_time  &gt;=#{dto.startTime}
+        and tt.happen_time &lt;=#{dto.endTime}
+        order by tea.happen_time ASC
+
+    </select>
+
+
+
+</mapper>

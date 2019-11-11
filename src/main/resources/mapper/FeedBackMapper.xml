@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.FeedBackMapper">
+
+    <!--获取省份列表-->
+    <insert id="save" >
+        insert  into
+        t_feed_back (detailed,user_id,status,create_time)
+        values
+               (#{feedBack.detailed},#{feedBack.userId},#{feedBack.status},#{feedBack.createTime})
+    </insert>
+    <select id="selectMax" resultType="com.dizhejiang.teachin.model.FeedBack">
+        select id from t_Feed_Back order by id desc
+    </select>
+
+
+
+</mapper>

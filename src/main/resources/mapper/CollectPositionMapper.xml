@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.CollectPositionMapper">
+
+    <insert id="save">
+        insert  into t_collect_position
+                (position_id,
+                 status,
+                 user_id,
+                 create_time)
+        values
+               (#{collectPosition.positionId},
+                #{collectPosition.status},
+                #{collectPosition.userId},
+                #{collectPosition.createTime})
+    </insert>
+    <select id="selectModelById" resultType="com.dizhejiang.teachin.model.CollectPosition">
+        select
+               position_id positionId,
+               status,
+               user_id userId,
+               create_time  createTime
+        FROM  t_collect_position
+        WHERE id=#{id}
+    </select>
+    <select id="selectModelByPosition" resultType="com.dizhejiang.teachin.model.CollectPosition">
+        select
+               position_id positionId,
+               status,
+               user_id userId,
+               create_time  createTime
+        FROM  t_collect_position
+        WHERE position_id=#{positionId}
+    </select>
+    <select id="selectModelByUserId" resultType="com.dizhejiang.teachin.model.Position">
+        select
+               tp.position position,
+               tp.salaryMin salaryMin,
+               tp.salaryMax salaryMax,
+               tp.company_name companyName,
+               tp.isclose isClose,
+               tp.workPlace workPlace
+        from  t_collect_position tcp
+                  join t_position tp
+                  on tcp.position_id = tp.id
+        where tcp.user_id =#{collectPosition.userId}
+        and tcp.status =#{collectPosition.status}
+    </select>
+    <update id="update">
+        update t_collect_position
+        <trim prefix="set" suffixOverrides=",">
+            <if test="collectPosition.positionId!=null ">
+                position_id=#{collectPosition.positionId},
+            </if>
+            <if test="collectPosition.status!=null and collectPosition.status!=''">
+                status=#{collectPosition.status},
+            </if>
+            <if test="collectPosition.createTime!=null and collectPosition.createTime!=''">
+                create_time=#{collectPosition.createTime},
+            </if>
+            <if test="collectPosition.userId!=null ">
+                user_id=#{collectPosition.userId},
+            </if>
+        </trim>
+        where id = #{collectPosition.id}
+    </update>
+
+</mapper>

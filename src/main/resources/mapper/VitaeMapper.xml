@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.VitaeMapper">
+
+    <insert id="save">
+        insert into t_Vitae
+                (user_id,sex,birthday,name,education,discipline,degree,school_id,school_name,create_time,update_time,status,phone,email
+                        ,department,enter_date,leave_date,detail)
+        values
+                (#{userId},#{vitae.sex},#{vitae.birthday},#{vitae.name},#{vitae.education},#{vitae.discipline},#{vitae.degree},
+                 #{vitae.schoolId},#{vitae.schoolName},#{vitae.createTime},#{vitae.updateTime},#{vitae.status},#{vitae.phone},#{vitae.email}
+                  ,#{vitae.department},#{vitae.enterDate},#{vitae.leaveDate},#{vitae.detail}      )
+    </insert>
+    <update id="update">
+        update t_Vitae
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userId!=null ">
+                user_id = #{userId},
+            </if>
+            <if test="vitae.sex!=null  ">
+                sex =#{vitae.sex},
+            </if>
+            <if test="vitae.birthday!=null  ">
+                birthday =#{vitae.birthday},
+            </if>
+            <if test="vitae.name!=null  ">
+                name = #{vitae.name},
+            </if>
+            <if test="vitae.education!=null  ">
+                education =#{vitae.education},
+            </if>
+            <if test="vitae.discipline!=null  ">
+                discipline = #{vitae.discipline},
+            </if>
+            <if test="vitae.degree!=null ">
+                degree = #{vitae.degree},
+            </if>
+            <if test="vitae.schoolId!=null  ">
+                school_id =#{vitae.schoolId},
+            </if>
+            <if test="vitae.schoolName!=null  ">
+                school_name =#{vitae.schoolName},
+            </if>
+            <if test="vitae.createTime!=null  ">
+                create_time =#{vitae.createTime},
+            </if>
+            <if test="vitae.updateTime!=null  ">
+                update_time=#{vitae.updateTime},
+            </if>
+            <if test="vitae.status!=null  ">
+                status = #{vitae.status},
+            </if>
+            <if test="vitae.phone!=null  ">
+                phone = #{vitae.phone},
+            </if>
+            <if test="vitae.email!=null  ">
+                email = #{vitae.email} ,
+            </if>
+            <if test="vitae.department!=null  ">
+                department = #{vitae.department},
+            </if>
+            <if test="vitae.enterDate!=null ">
+                enter_date = #{vitae.enterDate},
+            </if>
+            <if test="vitae.leaveDate!=null  ">
+                leave_date =#{vitae.leaveDate},
+            </if>
+            <if test="vitae.detail!=null  ">
+                detail = #{vitae.detail},
+            </if>
+        </trim>
+        where id = #{vitae.id}
+    </update>
+    <select id="selectVitaeByUserId" resultType="com.dizhejiang.teachin.model.Vitae">
+        select
+             id,
+             user_id userId,
+             sex,
+             birthday,
+             name,
+             education,
+             discipline,
+             degree,
+             department,
+             enter_date enterDate,
+             leave_date leaveDate,
+             detail,
+             school_id schoolId,
+             school_name schoolName,
+             create_time createTime,
+             update_time updateTime,
+             phone,
+             email,
+             status
+        from t_vitae
+        where  user_id=#{userId}
+
+    </select>
+
+</mapper>

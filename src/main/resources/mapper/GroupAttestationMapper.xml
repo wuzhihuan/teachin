@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.GroupAttestationMapper">
+    <insert id="save">
+        insert into
+        t_group_attestation
+        (school_id,school_name,name,id_no,sno,status,user_id,prove,department)
+        values
+        (#{groupAttestation.schoolId},#{groupAttestation.schoolName},#{groupAttestation.name},
+         #{groupAttestation.idNo},#{groupAttestation.sno},#{groupAttestation.status},#{groupAttestation.userId}
+                ,#{groupAttestation.prove},#{groupAttestation.department})
+    </insert>
+    <update id="update">
+        update  t_group_attestation
+        <trim prefix="set" suffixOverrides=",">
+            <if test="groupAttestation.schoolId!=null and groupAttestation.schoolId!=''">
+                school_id=#{groupAttestation.schoolId},
+            </if>
+            <if test="groupAttestation.schoolName!=null and groupAttestation.schoolName!=''">
+                school_name=#{groupAttestation.schoolName},
+            </if>
+            <if test="groupAttestation.name!=null and groupAttestation.name!=''">
+                name=#{groupAttestation.name},
+            </if>
+            <if test="groupAttestation.idNo!=null and groupAttestation.idNo!=''">
+                id_no=#{groupAttestation.idNo},
+            </if>
+            <if test="groupAttestation.sno!=null and groupAttestation.sno!=''">
+                sno=#{groupAttestation.sno},
+            </if>
+            <if test="groupAttestation.status!=null and groupAttestation.status!=''">
+                status=#{groupAttestation.status},
+            </if>
+            <if test="groupAttestation.userId!=null and groupAttestation.userId!=''">
+                user_id=#{groupAttestation.userId},
+            </if>
+            <if test="groupAttestation.department!=null and groupAttestation.department!=''">
+                department=#{groupAttestation.department},
+            </if>
+        </trim>
+        where id = #{groupAttestation.id}
+
+    </update>
+    <select id="selectMaxModel" resultType="com.dizhejiang.teachin.model.GroupAttestation">
+        select  id from t_group_attestation order by id desc
+    </select>
+    <select id="selectByUserId" resultType="com.dizhejiang.teachin.model.GroupAttestation">
+        select id from t_group_attestation where user_id =#{userId}
+    </select>
+</mapper>

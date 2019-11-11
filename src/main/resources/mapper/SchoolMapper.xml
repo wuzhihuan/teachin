@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.SchoolMapper">
+
+    <!--获取省份列表-->
+    <select id="getSchoolList" resultType="com.dizhejiang.teachin.model.School">
+          select
+                 id,
+                 school_name  schoolName,
+                 school_code  schoolCode,
+                 sub_name  subName,
+                 logo,
+                 contract_name contractName,
+                 contract_phone contractPhone,
+                 contract_wx contractWx,
+                 province
+         from  t_school
+         where
+                  province =#{province}
+    </select>
+
+
+    <select id="searchSchool" resultType="com.dizhejiang.teachin.model.School">
+        select
+               id,
+               school_name  schoolName,
+               school_code  schoolCode,
+               sub_name  subName,
+               logo,
+               contract_name contractName,
+               contract_phone contractPhone,
+               contract_wx contractWx,
+               province
+        from  t_school
+        where  school_name LIKE CONCAT(CONCAT('%', #{schoolName}),'%')
+    </select>
+    <select id="getData" resultType="com.dizhejiang.teachin.model.SchoolZd">
+        select
+        school_id schoolId,
+        target,
+        school_name schoolName,
+        city,
+        province
+        from tb_school
+        order by school_id asc
+    </select>
+    <insert id="save">
+        insert into
+        t_school (school_name,school_code,province,city)
+        values
+        (#{school.schoolName},#{school.schoolCode},#{school.province},#{school.city})
+    </insert>
+
+
+
+</mapper>

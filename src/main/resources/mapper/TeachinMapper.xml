@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.TeachinMapper">
+    <select id="getToastmastersList" resultType="com.dizhejiang.teachin.model.Teachin">
+          select
+              tt.id  id,
+              tt.title title,
+              tt.company_id companyId,
+              tt.company_name companyName,
+              tt.school_id schoolId,
+              tt.school_name schoolName,
+              sch.logo schoolUrl,
+              tt.place,
+              tt.is_Public isPublic ,
+              tt.happen_time happenTime,
+              tt.sub_company subCompany,
+              tt.discipline_info disciplineInfo,
+              tt.industry_info industryInfo,
+              tt.company_contract_name companyContractName,
+              tt.company_contract_phone companyContractPhone,
+              tt.op_user_id opUserId,
+              tt.status status,
+              tt.credit credit,
+              tt.industry_id industryId
+         from
+              t_teachin tt join t_school sch on tt.school_id = sch.id
+         where
+          1=1
+
+            <if test="(dto.listSchool==null and dto.listSchool.size()==0) or (dto.province!=null and dto.province!='')" >
+                and   sch.province = #{dto.province}
+            </if>
+            <if test="dto.listSchool!=null  and dto.listSchool.size()>0">
+                and tt.school_id in
+                <foreach collection="dto.listSchool" item="dto.listSchool" index="index" open="(" separator="," close=")">
+                    #{dto.listSchool}
+                </foreach>
+            </if>
+
+        <if test="dto.industryId!=null  and dto.industryId.size()>0">
+            and tt.industry_id in
+            <foreach collection="dto.industryId" item="dto.industryId" index="index" open="(" separator="," close=")">
+                #{dto.industryId}
+            </foreach>
+        </if>
+        <if test="dto.happenTime!=null and dto.happenTime!='' and dto!=null">
+            and  tt.happen_time LIKE CONCAT(CONCAT(#{dto.happenTime}),'%')
+            and  tt.status not in('01' ,'05')
+        </if>
+        <if test="dto.datePhase!=null and dto!=null   and  dto.datePhase==1 ">
+            and  tt.happen_time &gt;= #{selectDate}
+            and tt.happen_time &lt;= #{dto.nextDate}
+            and  tt.status not in('01' ,'05')
+        </if>
+        <if test="dto.datePhase!=null and dto!=null   and  dto.datePhase==2 ">
+            and  tt.happen_time &gt;= #{selectDate}
+            and tt.happen_time &lt;= #{dto.nextDate}
+            and  tt.status not in('01' ,'05')
+        </if>
+        <if test="dto.datePhase!=null  and dto!=null and (dto.datePhase==3 or dto.datePhase==4 or dto.datePhase==5 or dto.datePhase==6)">
+            and  tt.happen_time &lt;=#{selectDate}
+            and tt.happen_time &gt;=#{dto.nowDate}
+            and  tt.status not in('01' ,'05')
+        </if>
+
+        <if test="dto.happenTime!=null and dto.happenTime!='' ">
+            and  tt.happen_time LIKE CONCAT(CONCAT(#{dto.happenTime}),'%')
+        </if>
+        <if test="dto.keyword!=null and dto.keyword!='' and dto!=null">
+            and  (tt.title LIKE CONCAT(CONCAT('%', #{dto.keyword}),'%')  or  tt.school_name like CONCAT(CONCAT('%',#{dto.keyword}),'%')   )
+        </if>
+        <if test="dto.datePhase!=null  and dto!=null and dto.datePhase==7">
+            and  tt.happen_time &lt;= #{dto.nowDate}
+        </if>
+        <if test="dto.city!=null and dto.city!=''">
+            and sch.city = #{dto.city}
+        </if>
+            and  tt.status not in('01' ,'05')
+            order by tt.happen_time asc
+    </select>
+    <select id="getToastmastersListOrderByEed" resultType="com.dizhejiang.teachin.model.Teachin">
+        select
+        tt.id  id,
+        tt.title title,
+        tt.company_id companyId,
+        tt.company_name companyName,
+        tt.school_id schoolId,
+        tt.school_name schoolName,
+        sch.logo schoolUrl,
+        tt.place,
+        tt.is_Public isPublic,
+        tt.happen_time happenTime,
+        tt.sub_company subCompany,
+        tt.discipline_info disciplineInfo,
+        tt.industry_info industryInfo,
+        tt.company_contract_name companyContractName,
+        tt.company_contract_phone companyContractPhone,
+        tt.op_user_id opUserId,
+        tt.status status,
+        tt.credit credit,
+        tt.industry_id industryId
+        from
+        t_teachin tt join t_school sch on tt.school_id = sch.id
+        where
+        1=1
+
+        <if test="(dto.listSchool==null and dto.listSchool.size()==0) or (dto.province!=null and dto.province!='')" >
+            and   sch.province = #{dto.province}
+        </if>
+        <if test="dto.listSchool!=null  and dto.listSchool.size()>0">
+            and tt.school_id in
+            <foreach collection="dto.listSchool" item="dto.listSchool" index="index" open="(" separator="," close=")">
+                #{dto.listSchool}
+            </foreach>
+        </if>
+
+        <if test="dto.industryId!=null  and dto.industryId.size()>0">
+            and tt.industry_id in
+            <foreach collection="dto.industryId" item="dto.industryId" index="index" open="(" separator="," close=")">
+                #{dto.industryId}
+            </foreach>
+        </if>
+        <if test="dto.happenTime!=null and dto.happenTime!='' and dto!=null">
+            and  tt.happen_time=#{dto.happenTime}
+            and  tt.status='03'
+        </if>
+        <if test="dto.datePhase!=null and dto!=null   and dto.datePhase==1">
+            and  tt.happen_time=#{selectDate}
+            and  tt.status='03'
+        </if>
+        <if test="dto.datePhase!=null and dto!=null   and dto.datePhase==2">
+            and  tt.happen_time=#{selectDate}
+            and  tt.status='03'
+        </if>
+        <if test="dto.datePhase!=null  and dto!=null and (dto.datePhase==3 or dto.datePhase==4 or dto.datePhase==5 or dto.datePhase==6)">
+            and  tt.happen_time &lt;=#{selectDate}
+            and  tt.status='03'
+        </if>
+
+        <if test="dto.happenTime!=null and dto.happenTime!='' ">
+            and  tt.happen_time = #{dto.happenTime}
+        </if>
+        <if test="dto.keyword!=null and dto.keyword!='' and dto!=null">
+            and  (tt.title LIKE CONCAT(CONCAT('%', #{dto.keyword}),'%')  or  tt.school_name like CONCAT(CONCAT('%',#{dto.keyword}),'%')   )
+        </if>
+        <if test="dto.datePhase!=null  and dto!=null and dto.datePhase==7">
+            and  tt.status='04'
+        </if>
+        <if test="dto.city!=null and dto.city!=''">
+            and sch.city = #{dto.city}
+        </if>
+        and  tt.status not in('01' ,'05')
+        order by  tt.order_End desc, tt.happen_time asc
+    </select>
+
+    <!--获取宣讲会详情-->
+    <select id="getTeachinById" resultType="com.dizhejiang.teachin.model.Teachin">
+        select
+        tt.id,
+        tt.title,
+        tt.company_id companyId,
+        tt.company_name companyName,
+        tt.school_id schoolId,
+        tt.school_name schoolName,
+        sch.logo  schoolUrl,
+        tt.place,
+        tt.is_Public isPublic,
+        tt.introduction,
+        tt.happen_time happenTime,
+        tt.sub_company subCompany,
+        tt.discipline_info disciplineInfo,
+        tt.industry_info industryInfo,
+        tt.company_contract_name companyContractName,
+        tt.company_contract_phone companyContractPhone,
+        tt.op_user_id opUserId,
+        tt.status ,
+        tt.credit,
+        tt.is_Collect isCollect,
+        tt.is_Enroll isEnroll,
+        tt.is_End isEnd,
+        tt.industry_id industryId,
+        ( select industry_name from tb_industry where industry_id =tt.industry_id  )  industry,
+        ta.enroll_num enrollNum,
+        ta.look_num lookNum,
+        ta.foocus_num foocusNum,
+        ta.local_enroll_num localEnrollNum,
+        ta.other_enroll_num otherEnrollNum
+
+        from
+             t_teachin tt join t_school sch on tt.school_id = sch.id
+              join t_teachin_data ta on tt.id = ta.teachin_id
+        where
+        tt.id=#{id} and ta.status='01'
+    </select>
+
+    <select id="getTeachinBySchoolId" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        (select
+        tt.id id,
+        tt.title title,
+        tt.company_id companyId,
+        tt.school_name schoolName,
+        sh.logo schoolUrl,
+        tt.place place,
+        tt.op_user_id opUserId,
+        tt.happen_time happenTime,
+        tt.status status,
+        ta.enroll_num enrollNum,
+        ta.look_num lookNum,
+        ta.foocus_num foocusNum,
+        ta.local_enroll_num localEnrollNum,
+        ta.other_enroll_num otherEnrollNum
+        from
+        t_teachin tt join t_teachin_data ta on tt.id = ta.teachin_id
+        join t_school sh on sh.id = tt.school_id
+
+        where
+        ta.status='01' and tt.status!='01'
+        and (tt.op_user_id = #{dto.userId} or tt.school_id=#{schoolId})
+        <!-- 日历中的排序，按照发生时间顺序排列 -->
+        <if test="dto.happenTime!=null and dto.happenTime!='' and dto!=null ">
+            and tt.happen_time LIKE CONCAT(CONCAT('%', #{dto.happenTime}),'%')
+            order by tt.happen_time asc
+        </if>
+        <!-- 在我的中展示时候的排序，按照操作日期的倒叙排序 -->
+        <if test="dto.happenTime==null and dto!=null">
+            order by en.t_enroll desc
+        </if>)
+
+        UNION
+
+        (select
+        tt.id id,
+        tt.title title,
+        tt.company_id companyId,
+        tt.school_name schoolName,
+        (select logo from t_school where id = tt.school_id )schoolUrl,
+        tt.place place,
+        tt.op_user_id opUserId,
+        tt.happen_time happenTime,
+        tt.status status,
+        ta.enroll_num enrollNum,
+        ta.look_num lookNum,
+        ta.foocus_num foocusNum,
+        ta.local_enroll_num localEnrollNum,
+        ta.other_enroll_num otherEnrollNum
+        from
+        t_teachin tt join t_teachin_data ta on tt.id = ta.teachin_id
+        join t_enroll en on en.teachin_id = tt.id
+        where
+        ta.status='01' and tt.status!='01'
+        and en.status='01' and en.user_id=#{dto.userId}
+        <!-- 日历中的排序，按照发生时间顺序排列 -->
+        <if test="dto.happenTime!=null and dto.happenTime!='' and dto!=null">
+            and tt.happen_time LIKE CONCAT(CONCAT('%', #{dto.happenTime}),'%')
+            order by tt.happen_time asc
+        </if>
+        <!-- 在我的中展示时候的排序，按照操作日期的倒叙排序 -->
+        <if test="dto.happenTime==null and dto!=null">
+            order by en.t_enroll desc ,tt.happen_time asc
+        </if>)
+
+    </select>
+    <select id="selectModelByUserId" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+               tt.id id,
+               tt.title title,
+               tt.company_id companyId,
+               tt.school_name schoolName,
+               sh.logo schoolUrl,
+               tt.place place,
+               tt.op_user_id opUserId,
+               tt.happen_time happenTime,
+               tt.create_time createTime,
+               tt.status status,
+               ta.enroll_num enrollNum,
+               ta.look_num lookNum,
+               ta.foocus_num foocusNum,
+               ta.local_enroll_num localEnrollNum,
+               ta.other_enroll_num otherEnrollNum
+        from
+             t_teachin tt join t_teachin_data ta on tt.id = ta.teachin_id
+                          join t_school sh on sh.id = tt.school_id
+
+        where
+                ta.status='01' and tt.status!='01'
+          and tt.op_user_id = #{userId}
+          order by tt.create_time desc
+    </select>
+    <select id="selectModelByIdList" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+               tt.id id,
+               tt.title title,
+               tt.company_id companyId,
+               tt.school_name schoolName,
+               (select logo from t_school where id = tt.school_id )schoolUrl,
+               tt.place place,
+               tt.op_user_id opUserId,
+               tt.happen_time happenTime,
+               tt.status status,
+               ta.enroll_num enrollNum,
+               ta.look_num lookNum,
+               ta.foocus_num foocusNum,
+               ta.local_enroll_num localEnrollNum,
+               ta.other_enroll_num otherEnrollNum
+        from
+             t_teachin tt  join t_teachin_data ta on tt.id = ta.teachin_id
+        where 1=1
+        <if test="idList!=null  and idList.size()>0">
+            and tt.id in
+            <foreach collection="idList" item="idList" index="index" open="(" separator="," close=")">
+                #{idList}
+            </foreach>
+        </if>
+        order by tt.happen_time asc
+
+    </select>
+    <select id="selectMyModelByIdList" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+        tt.id id,
+        tt.title title,
+        tt.company_id companyId,
+        tt.school_name schoolName,
+        (select logo from t_school where id = tt.school_id )schoolUrl,
+        tt.place place,
+        tt.op_user_id opUserId,
+        tt.happen_time happenTime,
+        tt.status status,
+        ta.enroll_num enrollNum,
+        ta.look_num lookNum,
+        ta.foocus_num foocusNum,
+        ta.local_enroll_num localEnrollNum,
+        ta.other_enroll_num otherEnrollNum
+        from
+        t_teachin tt  join t_teachin_data ta on tt.id = ta.teachin_id
+
+        where 1=1
+        <if test="idList!=null  and idList.size()>0">
+            and tt.id in
+            <foreach collection="idList" item="idList" index="index" open="(" separator="," close=")">
+                #{idList}
+            </foreach>
+        </if>
+        order by  tt.operate_time desc, tt.happen_time asc
+    </select>
+
+    <select id="getTeachinByCompanyId" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        <!-- 我发布的宣讲会 -->
+        (select
+               tt.id id,
+               tt.title title,
+               tt.company_id companyId,
+               tt.school_name schoolName,
+               sh.logo schoolUrl,
+               tt.place place,
+               tt.op_user_id opUserId,
+               tt.happen_time happenTime,
+               tt.status  status,
+               ta.enroll_num enrollNum,
+               ta.look_num lookNum,
+               ta.foocus_num foocusNum,
+               ta.local_enroll_num localEnrollNum,
+               ta.other_enroll_num otherEnrollNum
+        from
+             t_teachin tt join t_teachin_data ta on  tt.id = ta.teachin_id
+            join t_school sh on sh.id = tt.school_id
+        where
+        tt.status!='01' and ta.status='01'
+        and tt.op_user_id = #{dto.userId}
+          <if test="dto.happenTime!=null and dto.happenTime!='' and dto!=null">
+              and tt.happen_time   LIKE CONCAT(CONCAT('%', #{dto.happenTime}),'%')
+              order by tt.happen_time asc
+          </if>
+        <if test="dto.happenTime==null and dto!=null">
+            order by tt.create_time desc
+        </if>)
+
+
+        UNION
+        <!-- 我报名的宣讲会 -->
+        (select
+        tt.id id,
+        tt.title title,
+        tt.company_id companyId,
+        tt.school_name schoolName,
+        (select logo from t_school where id = tt.school_id ) schoolUrl,
+        tt.place place,
+        tt.op_user_id opUserId,
+        tt.happen_time happenTime,
+        tt.status  status,
+        ta.enroll_num enrollNum,
+        ta.look_num lookNum,
+        ta.foocus_num foocusNum,
+        ta.local_enroll_num localEnrollNum,
+        ta.other_enroll_num otherEnrollNum
+        from
+        t_teachin tt join t_teachin_data ta on  tt.id = ta.teachin_id
+        join t_enroll en on en.teachin_id = tt.id
+        where
+        tt.status!='01' and ta.status='01' and en.status='01'
+        and en.user_id = #{dto.userId}
+        <if test="dto.happenTime!=null and dto.happenTime!='' and dto!=null">
+            and tt.happen_time   LIKE CONCAT(CONCAT('%', #{dto.happenTime}),'%')
+            order by tt.happen_time asc
+        </if>
+        <if test="dto.happenTime==null and dto!=null">
+            order by en.create_time desc
+        </if>)
+        UNION
+        <!-- 与我有关的的宣讲会 -->
+        ( select
+        tt.id id,
+        tt.title title,
+        tt.company_id companyId,
+        tt.school_name schoolName,
+        (select logo from t_school where id = tt.school_id ) schoolUrl,
+        tt.place place,
+        tt.op_user_id opUserId,
+        tt.happen_time happenTime,
+        tt.status status,
+        ta.enroll_num enrollNum,
+        ta.look_num lookNum,
+        ta.foocus_num foocusNum,
+        ta.local_enroll_num localEnrollNum,
+        ta.other_enroll_num otherEnrollNum
+        from
+        t_teachin tt join t_teachin_data ta on tt.id = ta.teachin_id
+        join t_company_attestation com on com.credit = tt.credit
+        where
+        tt.status!='01' and ta.status='01'
+        <if test="dto.happenTime!=null and dto.happenTime!=''and dto!=null ">
+            and tt.happen_time LIKE CONCAT(CONCAT('%', #{dto.happenTime}),'%')
+            order by tt.happen_time asc
+        </if>
+        <if test="dto.happenTime==null and dto!=null">
+            order by tt.create_time desc
+        </if>)
+    </select>
+
+    <select id="getTeachinByGroupId" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+               tt.id id,
+               tt.title title,
+               tt.company_id companyId,
+               tt.school_name schoolName,
+               sh.logo schoolUrl,
+               tt.place place,
+               tt.happen_time happenTime,
+               tt.status  status,
+               tt.op_user_id opUserId,
+               ta.enroll_num enrollNum,
+               ta.look_num lookNum,
+               ta.foocus_num foocusNum,
+               ta.local_enroll_num localEnrollNum,
+               ta.other_enroll_num otherEnrollNum
+        from
+             t_teachin tt join t_teachin_data ta on  tt.id = ta.teachin_id
+              join  t_group_attestation gr  on gr.user_id=tt.op_user_id
+              join t_school sh on sh.id = tt.school_id
+        where
+                gr.id=#{groupId} and tt.status!='01' and ta.status='01'
+          <if test="happenTime !=null and happenTime!=''">
+              and tt.happen_time   LIKE CONCAT(CONCAT('%', #{happenTime}),'%')
+          </if>
+    </select>
+    <select id="getTeachinByGroupIdAndTime" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+                                           tt.id id,
+                                           tt.title title,
+                                           tt.company_id companyId,
+                                           tt.school_name schoolName,
+                                           sh.logo schoolUrl,
+                                           tt.place place,
+                                           tt.happen_time happenTime,
+                                           tt.status  status,
+                                           tt.op_user_id opUserId,
+                                           ta.enroll_num enrollNum,
+                                           ta.look_num lookNum,
+                                           ta.foocus_num foocusNum,
+                                           ta.local_enroll_num localEnrollNum,
+                                           ta.other_enroll_num otherEnrollNum
+                                    from
+                                         t_teachin tt join t_teachin_data ta on  tt.id = ta.teachin_id
+                                                      join  t_group_attestation gr  on gr.user_id=tt.op_user_id
+                                                      join t_school sh on sh.id = tt.school_id
+                                    where
+                                            gr.id=#{groupId} and tt.status!='01' and ta.status='01'
+                                      and tt.happen_time  &gt;=#{dto.startTime}
+                                      and tt.happen_time &lt;=#{dto.endTime}
+                                    order by tt.happen_time asc
+    </select>
+
+
+    <select id="selectModelByTimeAndPlace" resultType="com.dizhejiang.teachin.model.Teachin">
+        select
+               tt.id,
+               tt.title,
+               tt.company_id companyId,
+               tt.company_name companyName,
+               tt.school_id schoolId,
+               tt.school_name schoolName,
+               sch.logo schoolUrl,
+               tt.place,
+               tt.is_Public isPublic,
+               tt.introduction,
+               tt.happen_time happenTime,
+               tt.sub_company subCompany,
+               tt.discipline_info disciplineInfo,
+               tt.industry_info industryInfo,
+               tt.company_contract_name companyContractName,
+               tt.company_contract_phone companyContractPhone,
+               tt.op_user_id opUserId,
+               tt.status ,
+               tt.credit,
+               tt.industry_id industryId
+        from
+             t_teachin tt join t_school sch  on tt.school_id =sch.id
+        where
+                tt.happen_time=#{teachin.happenTime} and tt.place=#{teachin.place} and tt.status!='01'
+    </select>
+    <select id="selectModelByStatus" resultType="com.dizhejiang.teachin.model.Teachin">
+        select
+               id,
+               title,
+               company_id companyId,
+               company_name companyName,
+               school_id schoolId,
+               school_name schoolName,
+               school_url schoolUrl,
+               place,
+               is_Public isPublic,
+               introduction,
+               happen_time happenTime,
+               sub_company subCompany,
+               discipline_info disciplineInfo,
+               industry_info industryInfo,
+               company_contract_name companyContractName,
+               company_contract_phone companyContractPhone,
+               op_user_id opUserId,
+               status ,
+               credit,
+               industry_id industryId
+        from
+             t_teachin
+        where
+                status ='01' and op_user_id=#{userId}
+    </select>
+
+    <insert id="save">
+        insert into t_teachin
+        (title,company_id,company_name,school_id,place,introduction,happen_time,sub_company,discipline_info,industry_info,
+         company_contract_name,company_contract_phone,op_user_id,status,industry_id,school_name,school_url,is_Public,credit,create_time
+                )
+        values
+        (#{teachin.title},#{teachin.companyId},#{teachin.companyName},#{teachin.schoolId},#{teachin.place},#{teachin.introduction},
+         #{teachin.happenTime},#{teachin.subCompany},#{teachin.disciplineInfo},#{teachin.industryInfo},#{teachin.companyContractName},
+         #{teachin.companyContractPhone},#{teachin.opUserId},#{teachin.status},#{teachin.industryId},#{teachin.schoolName},#{teachin.schoolUrl}
+                , #{teachin.isPublic},#{teachin.credit},#{teachin.createTime})
+    </insert>
+
+    <update id="update">
+        update
+                t_teachin
+        <trim prefix="set" suffixOverrides=",">
+            <if test="teachin.title!=null and teachin.title!=''">
+                title=#{teachin.title},
+            </if>
+            <if test="teachin.companyId!=null">
+                company_id=#{teachin.companyId},
+            </if>
+            <if test="teachin.companyName!=null and teachin.companyName!=''">
+                company_name = #{teachin.companyName},
+            </if>
+             <if test="teachin.schoolId!=null">
+                 school_id = #{teachin.schoolId},
+             </if>
+            <if test="teachin.place!=null and teachin.place!=''">
+                place = #{teachin.place},
+            </if>
+            <if test="teachin.introduction!=null and teachin.introduction!=''">
+                introduction = #{teachin.introduction},
+            </if>
+            <if test="teachin.happenTime!=null and teachin.happenTime!=''">
+                happen_time = #{teachin.happenTime},
+            </if>
+            <if test="teachin.subCompany!=null and teachin.subCompany!=''">
+                sub_company = #{teachin.subCompany},
+            </if>
+            <if test="teachin.disciplineInfo!=null and teachin.disciplineInfo!=''">
+                discipline_info = #{teachin.disciplineInfo},
+            </if>
+            <if test="teachin.industryInfo!=null and teachin.industryInfo!=''">
+                industry_info =#{teachin.industryInfo},
+            </if>
+            <if test="teachin.companyContractName!=null and teachin.companyContractName!=''">
+                company_contract_name = #{teachin.companyContractName},
+            </if>
+            <if test="teachin.companyContractPhone!=null and teachin.companyContractPhone!=''">
+                company_contract_phone =  #{teachin.companyContractPhone},
+            </if>
+            <if test="teachin.opUserId!=null">
+                op_user_id = #{teachin.opUserId},
+            </if>
+            <if test="teachin.status!=null and teachin.status!=''">
+                status = #{teachin.status},
+            </if>
+            <if test="teachin.industryId!=null">
+                industry_id = #{teachin.industryId},
+            </if>
+            <if test="teachin.schoolName!=null and teachin.schoolName!=''">
+                school_name=#{teachin.schoolName},
+            </if>
+            <if test="teachin.schoolUrl!=null and teachin.schoolUrl!=''">
+                school_url = #{teachin.schoolUrl},
+            </if>
+            <if test="teachin.isCollect!=null and teachin.isCollect!=''">
+                is_Collect = #{teachin.isCollect},
+            </if>
+            <if test="teachin.isEnroll!=null and teachin.isEnroll!=''">
+                is_Enroll = #{teachin.isEnroll},
+            </if>
+            <if test="teachin.credit!=null and teachin.credit!=''">
+                credit = #{teachin.credit},
+            </if>
+            <if test="teachin.isPublic!=null and teachin.isPublic!=''">
+                is_Public = #{teachin.isPublic},
+            </if>
+            <if test="teachin.isEnd!=null and teachin.isEnd!=''">
+                is_End = #{teachin.isEnd},
+            </if>
+            <if test="teachin.operateTime!=null and teachin.operateTime!=''">
+                operate_time = #{teachin.operateTime},
+            </if>
+            <if test="teachin.orderEnd!=null">
+                order_End = #{teachin.orderEnd},
+            </if>
+        </trim>
+        where id = #{teachin.id}
+    </update>
+    <update id="updateStatus">
+        update
+                t_teachin
+        set  status = #{status} where id = #{id}
+    </update>
+
+
+    <delete id="delete">
+        delete from  t_teachin where id=#{id}
+    </delete>
+
+
+    <select id="selectTeachinByOther" resultType="com.dizhejiang.teachin.model.Teachin">
+        select
+               id,
+               title,
+               company_id companyId,
+               company_name companyName,
+               school_id schoolId,
+               school_name schoolName,
+               school_url schoolUrl,
+               place,
+               introduction,
+               is_Public isPublic,
+               happen_time happenTime,
+               sub_company subCompany,
+               discipline_info disciplineInfo,
+               industry_info industryInfo,
+               company_contract_name companyContractName,
+               company_contract_phone companyContractPhone,
+               op_user_id opUserId,
+               credit,
+               status ,
+               industry_id industryId
+        from
+             t_teachin
+        where
+                id not in (#{id})
+                and credit = #{credit}
+        order by  happen_time desc
+        limit 3
+    </select>
+    <select id="selectModelByMax" resultType="com.dizhejiang.teachin.model.Teachin">
+        select id from t_teachin order by id desc
+    </select>
+</mapper>

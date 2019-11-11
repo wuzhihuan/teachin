@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.CollectMapper">
+
+    <update id="update">
+        update  t_collect set status=#{status} where teachin_id = #{teachId} and user_id=#{userId}
+    </update>
+
+    <insert id="save">
+        insert into t_collect (teachin_id,user_id,status) values(#{teachinId},#{userId},'01')
+    </insert>
+
+    <select id="selectCollectByTeachIdAndUserId" resultType="com.dizhejiang.teachin.model.Collect">
+        select
+               id,
+               teachin_id teachinId,
+               user_id userId,
+               status
+        from  t_collect
+        where teachin_id=#{teachId} and user_id=#{userId}
+    </select>
+
+    <select id="selectCollectListByUserId" resultType="com.dizhejiang.teachin.vo.TeachinVo">
+        select
+               tea.id,
+               tea.title  title,
+               tea.place place,
+               tea.school_name schoolName,
+               tea.happen_time happenTime,
+               tea.school_url schoolUrl,
+               tea.status status
+        from  t_collect col join t_teachin tea on col.teachin_id = tea.id
+        where  col.user_id=#{userId} and col.status='01'
+    </select>
+
+</mapper>

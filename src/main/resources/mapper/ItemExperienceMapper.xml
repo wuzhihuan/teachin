@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.ItemExperienceMapper">
+
+    <select id="selectItemExperienceListByUserId" resultType="com.dizhejiang.teachin.model.ItemExperience">
+        select
+            id,
+            user_id userId,
+            company_id companyId,
+            company_name companyName,
+            start_time startTime,
+            end_time endTime,
+            project_name projectName,
+            introduction,
+            duty,
+            achievement,
+            description,
+            status
+        from
+             t_item_experience
+        where user_id=#{userId}
+    </select>
+    <select id="selectProjectExperienceById" resultType="com.dizhejiang.teachin.model.ItemExperience">
+        select
+               id,
+               user_id userId,
+               company_id companyId,
+               company_name companyName,
+               project_name projectName,
+               introduction,
+               start_Time startTime,
+               end_Time endTime,
+               description,
+               duty,
+               achievement,
+               status
+        from
+             t_item_experience
+        where id=#{id}
+    </select>
+
+
+    <insert id="save">
+        insert into t_item_experience
+                (user_id,project_name,introduction,duty,achievement,status,start_time,end_time,description)
+        values  (#{itemExperience.userId},#{itemExperience.projectName},#{itemExperience.introduction},
+                 #{itemExperience.duty}, #{itemExperience.achievement},#{itemExperience.status},#{itemExperience.startTime},
+                 #{itemExperience.endTime}, #{itemExperience.description}     )
+    </insert>
+
+    <update id="update">
+        update t_item_experience
+        <trim prefix="set" suffixOverrides=",">
+            <if test="itemExperience.userId!=null and itemExperience.userId!='' ">
+                user_id = #{itemExperience.userId},
+            </if>
+            <if test="itemExperience.companyId!=null and itemExperience.companyId!='' ">
+                company_id=#{itemExperience.companyId},
+            </if>
+            <if test="itemExperience.companyName!=null and itemExperience.companyName!='' ">
+                company_name=#{itemExperience.companyName},
+            </if>
+            <if test="itemExperience.projectName!=null and itemExperience.projectName!='' ">
+                project_name=#{itemExperience.projectName},
+            </if>
+            <if test="itemExperience.introduction!=null and itemExperience.introduction!='' ">
+                introduction=#{itemExperience.introduction},
+            </if>
+            <if test="itemExperience.duty!=null and itemExperience.duty!='' ">
+                duty=#{itemExperience.duty},
+            </if>
+            <if test="itemExperience.startTime!=null and itemExperience.startTime!='' ">
+                start_time=#{itemExperience.startTime},
+            </if>
+            <if test="itemExperience.endTime!=null and itemExperience.endTime!='' ">
+                end_time=#{itemExperience.endTime},
+            </if>
+            <if test="itemExperience.description!=null and itemExperience.description!='' ">
+                description=#{itemExperience.description},
+            </if>
+            <if test="itemExperience.achievement!=null and itemExperience.achievement!='' ">
+                achievement=#{itemExperience.achievement}
+            </if>
+        </trim>
+        where id=#{itemExperience.id}
+    </update>
+
+    <delete id="delete">
+        delete from t_item_experience where id=#{id}
+    </delete>
+
+
+</mapper>

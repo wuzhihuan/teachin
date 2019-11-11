@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.PositionMapper">
+    <insert id="save">
+        insert into t_position
+                (position,work_type,salary_min,salary_max,part,num,work_place,status,company_id,create_time,company_name
+                        ,views,deliver_num,user_id,description)
+        values
+               (#{position.position},#{position.workType},#{position.salaryMin},#{position.salaryMax},#{position.part},
+                #{position.num},#{position.workPlace},#{position.status},#{position.companyId},#{position.createTime},#{position.companyName},
+                #{position.views},#{position.deliverNum},#{position.userId},#{position.description}       )
+    </insert>
+    <update id="update">
+        update  t_position
+        <trim prefix="set" suffixOverrides=",">
+            <if test="position.position!=null and position.position!=''">
+                position=#{position.position},
+            </if>
+            <if test="position.workType!=null and position.workType!=''">
+                work_type=#{position.workType},
+            </if>
+            <if test="position.salaryMin!=null and position.salaryMin!=''">
+                salary_min=#{position.salaryMin},
+            </if>
+            <if test="position.salaryMax!=null and position.salaryMax!=''">
+                salary_max=#{position.salaryMax},
+            </if>
+            <if test="position.part!=null and position.part!=''">
+                part=#{position.part},
+            </if>
+            <if test="position.num!=null and position.num!=''">
+                num=#{position.num},
+            </if>
+            <if test="position.workPlace!=null and position.workPlace!=''">
+                work_place=#{position.workPlace},
+            </if>
+            <if test="position.status!=null and position.status!=''">
+                status=#{position.status},
+            </if>
+            <if test="position.status!=null">
+                views=#{position.views},
+            </if>
+            <if test="position.deliverNum!=null">
+                deliver_num=#{position.deliverNum},
+            </if>
+            <if test="position.userId!=null">
+                user_id=#{position.userId},
+            </if>
+            <if test="position.companyId!=null">
+                company_id=#{position.companyId},
+            </if>
+            <if test="position.createTime!=null and position.createTime!='' ">
+                create_time=#{position.createTime},
+            </if>
+            <if test="position.description!=null and position.description!='' ">
+                description=#{position.description},
+            </if>
+            <if test="position.companyName!=null and position.companyName!='' ">
+                company_name=#{position.companyName},
+            </if>
+        </trim>
+    </update>
+    <select id="selectPositionByCompanyId" resultType="com.dizhejiang.teachin.model.Position">
+          select
+                 id,
+                 position,
+                 work_type workType,
+                 salary_min salaryMin,
+                 salary_max salaryMax,
+                 part,
+                 num,
+                 work_place workPlace,
+                 status,
+                 views,
+                 deliver_num deliverNum,
+                 user_id userId,
+                 company_id companyId,
+                 company_name companyName,
+                 create_time createTime
+         from  t_position
+         where credit=#{credit}
+        order by create_time desc
+        limit 3
+    </select>
+    <select id="selectModelMax" resultType="com.dizhejiang.teachin.model.Position">
+        select id from t_position order by id desc
+    </select>
+    <select id="selectPositionById" resultType="com.dizhejiang.teachin.model.Position">
+        select
+               id,
+               position,
+               work_type workType,
+               salary_min salaryMin,
+               salary_max salaryMax,
+               part,
+               num,
+               work_place workPlace,
+               status,
+               views,
+               deliver_num deliverNum,
+               user_id userId,
+               company_id companyId,
+               company_name companyName,
+               isclose isClose,
+               create_time createTime
+        from  t_position
+        where id=#{id}
+    </select>
+    <select id="selectPositionByUserId" resultType="com.dizhejiang.teachin.model.Position">
+        select
+               id,
+               position,
+               work_type workType,
+               salary_min salaryMin,
+               salary_max salaryMax,
+               part,
+               num,
+               work_place workPlace,
+               status,
+               company_id companyId,
+               company_name companyName,
+               views,
+               deliver_num deliverNum,
+               user_id userId,
+               create_time createTime
+        from  t_position
+        where user_id=#{userId}
+    </select>
+    <select id="searchJobs" resultType="com.dizhejiang.teachin.model.Position">
+        select
+               id,
+               position,
+               work_type workType,
+               salary_min salaryMin,
+               salary_max salaryMax,
+               part,
+               num,
+               work_place workPlace,
+               status,
+               views,
+               deliver_num deliverNum,
+               user_id userId,
+               company_id companyId,
+               company_name companyName,
+               create_time createTime
+        from  t_position
+        where position   LIKE CONCAT(CONCAT('%', #{position}),'%')
+    </select>
+</mapper>

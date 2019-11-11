@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dizhejiang.teachin.mapper.UserMapper">
+
+    <!--通过openid查询-->
+    <select id="selectUserByOpenId" resultType="com.dizhejiang.teachin.model.User">
+          select
+            id ,
+            user_type as  userType,
+            school_id as schoolId,
+            group_id as groupId,
+            user_name as userName,
+            head,
+            sex,
+            address,
+            email,
+            wx_code wxCode,
+            company_id as companyId,
+            wx_authcode as  wxAuthcode
+         from  t_user
+         where wx_authcode=#{openid}
+    </select>
+
+    <select id="selectUserById" resultType="com.dizhejiang.teachin.model.User">
+        select
+               id ,
+               user_type as  userType,
+               school_id as schoolId,
+               school_name as schoolName,
+               group_id as groupId,
+               user_name as userName,
+               head,
+               mobile,
+               sex,
+               invite_code inviteCode,
+               address,
+               status,
+               credit,
+               email,
+               wx_code wxCode,
+               company_id as companyId
+        from  t_user
+        where id=#{id}
+    </select>
+    <update id="update">
+        update t_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="user.mobile!=null and user.mobile!='' ">
+                mobile = #{user.mobile},
+            </if>
+            <if test="user.head!=null and user.head!='' ">
+                head = #{user.head},
+            </if>
+            <if test="user.sex!=null and user.sex!='' ">
+                sex = #{user.sex},
+            </if>
+            <if test="user.userName!=null and user.userName!='' ">
+                user_name = #{user.userName},
+            </if>
+            <if test="user.address!=null and user.address!='' ">
+                address = #{user.address},
+            </if>
+        </trim>
+        where id = #{user.id}
+    </update>
+
+
+    <insert id="save">
+        insert  into
+          t_user(user_type,create_time,status,user_name,sex,head,wx_authcode,invite_code,parent_Id,mobile)
+        values
+          (#{user.userType},#{user.createTime},#{user.status},
+           #{user.userName},#{user.sex},#{user.head},#{user.wxAuthcode},#{user.inviteCode},#{user.parentId},#{user.mobile})
+    </insert>
+    <update id="updateEmail">
+        update t_user set email = #{email} where id = #{userId}
+    </update>
+    <update id="updateStatus">
+        update t_user set status=#{status} where id=#{userId}
+    </update>
+    <select id="selectModelByCode" resultType="com.dizhejiang.teachin.model.User">
+        select
+
+            id
+        from t_user where invite_code=#{inviteCode}
+    </select>
+
+</mapper>
